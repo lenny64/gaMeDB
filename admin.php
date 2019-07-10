@@ -42,7 +42,8 @@ include('./supprimer_totem.php');
             <h5 class="card-title">Totems</h5>
             <p class="card-text">
                 <ul class="list-group">
-                <?php foreach ($totems as $totem) {
+                <?php $totems = getTotems();
+                foreach ($totems as $totem) {
                     echo "<li class='list-group-item'>".$totem['totem_localisation']." ".$totem['totem_code']." <a href='https://umap.openstreetmap.fr/en/map/balades-massy_312751#18/".$totem['totem_longitude']."/".$totem['totem_latitude']."' target='_blank'>localiser</a> <a href='./admin.php?action=supprimer_totem&id=".$totem['totem_id']."'>supprimer</a></li>";
                 } ?>
                 </ul>

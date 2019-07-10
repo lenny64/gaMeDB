@@ -4,6 +4,7 @@ require_once("./include/common.php");
 require_once("./include/functions.php");
 
 $joueurs = Array();
+global $db;
 
 if (isset($_GET['id']) && $_GET['id'] !== NULL)
 {
