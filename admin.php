@@ -1,9 +1,9 @@
 <?php
-include('./include/front_header.php');
-include('./get_associations.php');
-include('./get_joueurs.php');
-include('./get_totems.php');
-include('./supprimer_totem.php');
+require_once('./include/front_header.php');
+require_once('./get_associations.php');
+require_once('./get_joueurs.php');
+require_once('./get_totems.php');
+require_once('./supprimer_totem.php');
 ?>
 
 <div class="col-md-12 my-2">
@@ -27,7 +27,9 @@ include('./supprimer_totem.php');
             <h5 class="card-title">Joueurs</h5>
             <p class="card-text">
                 <ul class="list-group">
-                <?php foreach ($joueurs as $joueur) {
+                <?php
+                $joueurs = getJoueurs();
+                foreach ($joueurs as $joueur) {
                     echo "<li class='list-group-item'>".$joueur['joueur_pseudo']."</li>";
                 } ?>
                 </ul>

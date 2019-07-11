@@ -3,26 +3,39 @@
 require_once("./include/common.php");
 require_once("./include/functions.php");
 
-$joueurs = Array();
-global $db;
-
-if (isset($_GET['id']) && $_GET['id'] !== NULL)
+function getJoueurs($joueur_id=false)
 {
-    $joueur_id = $_GET['id'];
-    $liste_joueurs = mysqli_query($db, "SELECT * FROM joueurs WHERE joueur_id = $joueur_id");
-}
-else
-{
-    $liste_joueurs = mysqli_query($db, "SELECT * FROM joueurs");
+    $joueurs = Array();
+    global $db;
+
+    if ($joueur_id !== false && $joueur_id !== NULL)
+    {
+        $liste_joueurs = mysqli_query($db, "SELECT * FROM joueurs WHERE joueur_id = $joueur_id");
+        echo json_encode($joueur_id);
+    }
+    else
+    {
+        // ATTENTION GROS PROBLEME DE SECURITE A RESOUDRE
+        $liste_joueurs = mysqli_query($db, "SELECT * FROM joueurs");
+    }
+
+    while ($joueur = mysqli_fetch_assoc($liste_joueurs))
+    {
+        $joueurs[] = $joueur;
+    }
+
+    if (isset($_GET['format']) && $_GET['format'] == 'json') {
+        echo json_encode($joueurs);
+    }
+
+    return $joueurs;
 }
 
-while ($joueur = mysqli_fetch_array($liste_joueurs))
-{
-    $joueurs[] = $joueur;
+if (isset($_GET['joueur_id']) && $_GET['joueur_id'] != NULL) {
+    getJoueurs($_GET['joueur_id']);
 }
-
-if (isset($_GET['format']) && $_GET['format'] == 'json') {
-    echo json_encode($joueurs);
+else {
+    getJoueurs();
 }
 
 ?>

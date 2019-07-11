@@ -11,9 +11,9 @@ if (isset($_POST['totem_code']) && isset($_POST['joueur_id']) && isset($_POST['a
         $totem_result_bdd = mysqli_query($db, "SELECT totem_id FROM totems WHERE totem_code = '".$totem_code."'");
         $totem_id = mysqli_fetch_array($totem_result_bdd)[0];
         // Je cherche l'id du joueur
-        $joueur_id = 1;
+        $joueur_id = mysqli_real_escape_string($db, $_POST['joueur_id']);
         // Je cherche l'id de l'association
-        $association_id = 1;
+        $association_id = mysqli_real_escape_string($db, $_POST['association_id']);
         if (empty($totem_id))
         {
             echo json_encode("Erreur de valeurs");
@@ -35,8 +35,14 @@ if ($creationok === true)
                                     VALUES( "'.$joueur_id.'",
                                             "'.$association_id.'",
                                             "'.$totem_id.'");');
-    include('./get_stats.php');
-    getStats($association_id=$association_id,$joueur_id=$joueur_id);
+    include('./get_score_association.php');
+    getScoreAssociation($association_id);
+    include('./get_score_joueur.php');
+    getScoreJoueur($joueur_id);
+    include('./post_score_joueur.php');
+    postScoreJoueur($joueur_id);
+    include('./post_score_association.php');
+    postScoreAssociation($association_id);
     echo json_encode("Succes !!");
 }
 

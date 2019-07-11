@@ -34,7 +34,7 @@ class Session
         global $db;
         $this->db = $db;
         include_once('./get_joueurs.php');
-        $this->joueurs = $joueurs;
+        $this->joueurs = getJoueurs();
     }
     function connecter($infos)
     {
