@@ -31,39 +31,19 @@ class Session
     function __construct()
     {
         session_start();
+        global $config;
         global $db;
         $this->db = $db;
-        include_once('./get_joueurs.php');
-        $this->joueurs = getJoueurs();
     }
     function connecter($infos)
     {
         // Methode par utilisateur et mot de passe
         if (isset($infos['pseudo']) && isset($infos['password']) && $infos['pseudo'] != false && $infos['password'] != false) {
-            $pseudo = $infos['pseudo'];
-            $password = $infos['password'];
-            foreach ($this->joueurs as $joueur) {
-                if ($pseudo == $joueur['joueur_pseudo']) {
-                    // J'ai trouvé le login
-                    if (md5($password) == $joueur['joueur_password']) {
-                        // J'ai le password
-                        $this->connected = true;
-                        $this->pseudo = $joueur['joueur_pseudo'];
-                        $this->joueur_id = $joueur['joueur_id'];
-                        $this->association_id = $joueur['joueur_association_id'];
-                        $this->nom = $joueur['joueur_nom'];
-                        $this->prenom = $joueur['joueur_prenom'];
-                        $this->mail = $joueur['joueur_mail'];
-                        $_SESSION['connected'] = true;
-                        $_SESSION['joueur_id'] = $this->joueur_id;
-                    }
-                }
-            }
-        }
-        else if (isset($infos['joueur_id']) && $infos['joueur_id'] != null) {
-            $joueur_id = $infos['joueur_id'];
-            foreach ($this->joueurs as $joueur) {
-                if ($joueur_id == $joueur['joueur_id']) {
+            $pseudo = mysqli_real_escape_string($this->db, $infos['pseudo']);
+            $password = mysqli_real_escape_string($this->db, $infos['password']);
+            $db_liste_joueurs = mysqli_query($this->db, "SELECT * FROM joueurs WHERE joueur_pseudo = '".strtolower($pseudo)."' LIMIT 1;");
+            while ($joueur = mysqli_fetch_assoc($db_liste_joueurs)) {
+                if (md5($password) == $joueur['joueur_password']) {
                     $this->connected = true;
                     $this->pseudo = $joueur['joueur_pseudo'];
                     $this->joueur_id = $joueur['joueur_id'];
@@ -74,6 +54,21 @@ class Session
                     $_SESSION['connected'] = true;
                     $_SESSION['joueur_id'] = $this->joueur_id;
                 }
+            }
+        }
+        else if (isset($infos['joueur_id']) && $infos['joueur_id'] != null) {
+            $joueur_id = $infos['joueur_id'];
+            $db_joueur = mysqli_query($this->db, "SELECT * FROM joueurs WHERE joueur_id = $joueur_id LIMIT 1;");
+            while ($joueur = mysqli_fetch_assoc($db_joueur)) {
+                $this->connected = true;
+                $this->pseudo = $joueur['joueur_pseudo'];
+                $this->joueur_id = $joueur['joueur_id'];
+                $this->association_id = $joueur['joueur_association_id'];
+                $this->nom = $joueur['joueur_nom'];
+                $this->prenom = $joueur['joueur_prenom'];
+                $this->mail = $joueur['joueur_mail'];
+                $_SESSION['connected'] = true;
+                $_SESSION['joueur_id'] = $this->joueur_id;
             }
         }
         else {

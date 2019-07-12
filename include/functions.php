@@ -1,5 +1,5 @@
 <?php
-include_once("./get_totems.php");
+include_once("./include/common.php");
 
 function jsonError($prefix, $error_msg, $internal_code="Unknown", $http_status_code=500, $severity="FATAL")
 {
@@ -35,6 +35,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 }
 
 function evaluerScoreFromScans($scans) {
+    global $config;
     $score = 0;
     if (sizeof($scans) > 1) {
         for ($i=0; $i < sizeof($scans); $i++) {
@@ -42,15 +43,17 @@ function evaluerScoreFromScans($scans) {
             if (array_key_exists($i+1,$scans)) {
                 // CALCUL DE LA DISTANCE ENTRE I ET I1
                 $totem_i_id = $scans[$i]['scan_totem_id'];
-                $totem_i = getTotems($id=$totem_i_id);
-                $totem_i_longitude = floatval($totem_i[$totem_i_id]['totem_longitude']);
+                $url_totem_i = $config['URL_BASE']."get_totems.php?totem_id=".$totem_i_id;
+                $totem_i = json_decode(file_get_contents($url_totem_i));
+                $totem_i_longitude = floatval($totem_i->$totem_i_id->totem_longitude);
                 // echo $totem_i_longitude;
-                $totem_i_latitude = floatval($totem_i[$totem_i_id]['totem_latitude']);
+                $totem_i_latitude = floatval($totem_i->$totem_i_id->totem_latitude);
 
                 $totem_i1_id = $scans[$i+1]['scan_totem_id'];
-                $totem_i1 = getTotems($id=$totem_i1_id);
-                $totem_i1_longitude = floatval($totem_i1[$totem_i1_id]['totem_longitude']);
-                $totem_i1_latitude = floatval($totem_i1[$totem_i1_id]['totem_latitude']);
+                $url_totem_i1 = $config['URL_BASE']."get_totems.php?totem_id=".$totem_i1_id;
+                $totem_i1 = json_decode(file_get_contents($url_totem_i1));
+                $totem_i1_longitude = floatval($totem_i1->$totem_i1_id->totem_longitude);
+                $totem_i1_latitude = floatval($totem_i1->$totem_i1_id->totem_latitude);
 
                 $distance_exacte = distance($totem_i_latitude, $totem_i_longitude, $totem_i1_latitude, $totem_i1_longitude, 'K');
                 $distance = (round($distance_exacte)%5 === 0) ? round($distance_exacte) : round(($distance_exacte+5/2)/5)*5;

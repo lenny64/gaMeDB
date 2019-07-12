@@ -2,7 +2,7 @@
 require_once("./include/common.php");
 require_once("./include/functions.php");
 
-function getScoreJoueur($joueur_id, $format=false)
+function getScoreJoueur_old($joueur_id)
 {
     global $db;
     $nbScans = 0;
@@ -14,11 +14,21 @@ function getScoreJoueur($joueur_id, $format=false)
             $scans[] = $scan;
         }
         $score = evaluerScoreFromScans($scans);
-        if (isset($format) && $format == 'json') {
-            echo json_encode($score);
-        }
+        echo json_encode($score);
+        return $score;
     }
-    return $score;
+}
+
+function getScoreJoueur($joueur_id)
+{
+    global $db;
+    $score = 0;
+    if (isset($joueur_id) && $joueur_id != NULL) {
+        $db_score = mysqli_query($db, "SELECT points_joueur_points FROM `points_joueur` WHERE points_joueur_joueur_id = '".$joueur_id."' ORDER BY points_joueur_datetime DESC LIMIT 1;");
+        $score = mysqli_fetch_all($db_score)[0][0];
+        echo json_encode($score);
+        return $score;
+    }
 }
 
 

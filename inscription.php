@@ -1,7 +1,6 @@
 <?php
-include('./include/front_header.php');
+include_once('./include/front_header.php');
 include('./create_joueur.php');
-include('./get_associations.php');
 
 if ($creationok === false) {
 ?>
@@ -29,8 +28,11 @@ if ($creationok === false) {
             <div class="mb-3">
                 <select name="association_id" class="form-control">
                     <option value="0">Association</option>
-                    <?php foreach ($associations as $asso) {
-                        echo "<option value='".$asso['association_id']."'>".$asso['association_nom']."</option>";
+                    <?php
+                    $url_associations = $config['URL_BASE']."get_associations.php";
+                    $associations = json_decode(file_get_contents($url_associations));
+                    foreach ($associations as $asso) {
+                        echo "<option value='".$asso->association_id."'>".$asso->association_nom."</option>";
                     } ?>
                 </select>
             </div>

@@ -10,7 +10,6 @@ if (isset($_GET['deconnexion'])) {
     $Session->connected = false;
 }
 else if (isset($_GET['connexion'])) {
-    session_start();
     if (isset($_POST['pseudo']) && isset($_POST['password'])) {
         if ($_POST['pseudo'] != NULL && $_POST['password'] != NULL) {
             $Session->connecter(Array('pseudo' => $_POST['pseudo'], 'password' => $_POST['password']));

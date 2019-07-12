@@ -22,14 +22,12 @@ function getTotems($id=null) {
         $totems[$totem['totem_id']] = $totem;
     }
 
-    if (isset($_GET['format']) && $_GET['format'] == 'json'){
-        echo json_encode($totems);
-    }
+    echo json_encode($totems);
     return $totems;
 }
 
-if (isset($_GET['id']) && $_GET['id'] !== NULL) {
-    getTotems($_GET['id']);
+if (isset($_GET['totem_id']) && $_GET['totem_id'] !== NULL) {
+    getTotems($_GET['totem_id']);
 }
 else {
     getTotems();

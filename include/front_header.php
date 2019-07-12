@@ -19,15 +19,13 @@ include('./session.php');
 
     <title>gaMeDB</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/product/">
+    <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/product/"> -->
 
     <script src="./include/plotly-latest.min.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="./bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="album.css" rel="stylesheet">
 
 </head>
 
@@ -37,7 +35,7 @@ include('./session.php');
     <h5 class="my-0 mr-md-auto font-weight-normal"><a href="./index.php">gaMeDB</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <a class="p-2 text-dark" href="./admin.php">Administration</a>
-        <?php if (isset($Session->connected) && $Session->connected == false) echo '<a class="p-2 text-dark" href="./inscription.php">Inscription</a>'; ?>
+        <?php if (!isset($Session->connected) || $Session->connected == false) echo '<a class="p-2 text-dark" href="./inscription.php">Inscription</a>'; ?>
     </nav>
     <?php if (isset($Session->connected) && $Session->connected == true) { ?>
         <a class="p-2 text-dark" href="./index.php?deconnexion">Déconnexion</a>

@@ -1,6 +1,5 @@
 <?php
 include('./include/front_header.php');
-include('./get_associations.php');
 
 $creationok = false;
 

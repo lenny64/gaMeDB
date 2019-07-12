@@ -1,8 +1,12 @@
-<?php include('./include/front_header.php');
-include('./get_score_joueur.php');
-include('./get_score_association.php');
+<?php
+include('./include/front_header.php');
 
 if (isset($Session->connected) && $Session->connected == true) {
+
+    $url_joueur = $config['URL_BASE']."get_score_joueur.php?joueur_id=".$Session->joueur_id;
+    $score_joueur = json_decode(file_get_contents($url_joueur));
+    $url_association = $config['URL_BASE']."get_score_association.php?association_id=".$Session->association_id;
+    $score_association = json_decode(file_get_contents($url_association));
 
 ?>
 
@@ -24,9 +28,9 @@ if (isset($Session->connected) && $Session->connected == true) {
     <div class="col-md-6">
         <div class="card mb-6 box-shadow my-2">
             <div class="card-body">
-                <h4 class="card-title">Mon score</h4>
-                <p class="card-text"><?php echo $score_joueur; ?></p>
+                <h4 class="card-title">Mon score : <?php echo $score_joueur; ?></h4>
                 <div id="tester" style="width:100%;height:200px;"></div>
+                <p class="card-text">Score de mon association : <?php echo $score_association; ?></p>
             </div>
         </div>
     </div>

@@ -12,11 +12,9 @@ function getHistoriqueScoreJoueur($joueur_id, $format=false)
             $tableau['dt'][] = $score['dt'];
             $tableau['points'][] = $score['points'];
         }
-    }
-    if (isset($format) && $format == 'json') {
         echo json_encode($tableau);
+        return $tableau;
     }
-    return $tableau;
 }
 
 if (isset($_GET['joueur_id']) && $_GET['joueur_id'] != NULL) {

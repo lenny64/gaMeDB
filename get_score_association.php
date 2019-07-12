@@ -2,7 +2,7 @@
 require_once("./include/common.php");
 require_once("./include/functions.php");
 
-function getScoreAssociation($association_id, $format=false)
+function getScoreAssociation_old($association_id)
 {
     global $db;
     $nbScans = 0;
@@ -14,11 +14,21 @@ function getScoreAssociation($association_id, $format=false)
             $scans[] = $scan;
         }
         $score = evaluerScoreFromScans($scans);
-        if (isset($format) && $format != NULL) {
-            echo json_encode($score);
-        }
+        echo json_encode($score);
+        return $score;
     }
-    return $score;
+}
+
+function getScoreAssociation($association_id)
+{
+    global $db;
+    $score = 0;
+    if (isset($association_id) && $association_id != NULL) {
+        $db_score = mysqli_query($db, "SELECT points_association_points FROM `points_association` WHERE points_association_association_id = $association_id ORDER BY points_association_datetime DESC LIMIT 1;");
+        $score = mysqli_fetch_all($db_score)[0][0];
+        echo json_encode($score);
+        return $score;
+    }
 }
 
 function getHistoriqueScoreAssociation($association_id, $format=false)
@@ -32,15 +42,15 @@ function getHistoriqueScoreAssociation($association_id, $format=false)
             $tableau['dt'][] = $score['dt'];
             $tableau['points'][] = $score['points'];
         }
+        return $tableau;
     }
     if (isset($format) && $format == 'json') {
         echo json_encode($tableau);
     }
-    return $tableau;
 }
 
 if (isset($_GET['association_id']) && $_GET['association_id'] != NULL) {
-    $score_association = getStatsAssociation($_GET['association_id']);
+    $score_association = getScoreAssociation($_GET['association_id']);
 }
 
 ?>

@@ -16,7 +16,7 @@ function getJoueurs($joueur_id=false)
     else
     {
         // ATTENTION GROS PROBLEME DE SECURITE A RESOUDRE
-        $liste_joueurs = mysqli_query($db, "SELECT * FROM joueurs");
+        $liste_joueurs = mysqli_query($db, "SELECT joueur_id, joueur_pseudo, joueur_association_id FROM joueurs");
     }
 
     while ($joueur = mysqli_fetch_assoc($liste_joueurs))
@@ -24,9 +24,7 @@ function getJoueurs($joueur_id=false)
         $joueurs[] = $joueur;
     }
 
-    if (isset($_GET['format']) && $_GET['format'] == 'json') {
-        echo json_encode($joueurs);
-    }
+    echo json_encode($joueurs);
 
     return $joueurs;
 }

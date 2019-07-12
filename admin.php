@@ -1,8 +1,5 @@
 <?php
 require_once('./include/front_header.php');
-require_once('./get_associations.php');
-require_once('./get_joueurs.php');
-require_once('./get_totems.php');
 require_once('./supprimer_totem.php');
 ?>
 
@@ -12,8 +9,11 @@ require_once('./supprimer_totem.php');
             <h5 class="card-title">Associations</h5>
             <p class="card-text">
                 <ul class="list-group">
-                <?php foreach ($associations as $asso) {
-                    echo "<li class='list-group-item'>".$asso['association_nom']."</li>";
+                <?php
+                $url_associations = $config['URL_BASE']."get_associations.php";
+                $associations = json_decode(file_get_contents($url_associations));
+                foreach ($associations as $asso) {
+                    echo "<li class='list-group-item'>".$asso->association_nom."</li>";
                 } ?>
                 </ul>
             </p>
@@ -28,9 +28,12 @@ require_once('./supprimer_totem.php');
             <p class="card-text">
                 <ul class="list-group">
                 <?php
-                $joueurs = getJoueurs();
+                $url_joueurs = $config['URL_BASE']."get_joueurs.php";
+                $joueurs = json_decode(file_get_contents($url_joueurs));
                 foreach ($joueurs as $joueur) {
-                    echo "<li class='list-group-item'>".$joueur['joueur_pseudo']."</li>";
+                    $url_score_joueur = $config['URL_BASE']."get_score_joueur.php?joueur_id=".$joueur->joueur_id;
+                    $score_joueur = json_decode(file_get_contents($url_score_joueur));
+                    echo "<li class='list-group-item'>".$joueur->joueur_pseudo." (".$joueur->joueur_association_id.") (".$score_joueur.")</li>";
                 } ?>
                 </ul>
             </p>
@@ -44,9 +47,11 @@ require_once('./supprimer_totem.php');
             <h5 class="card-title">Totems</h5>
             <p class="card-text">
                 <ul class="list-group">
-                <?php $totems = getTotems();
+                <?php
+                $url_totems = $config['URL_BASE']."get_totems.php";
+                $totems = json_decode(file_get_contents($url_totems));
                 foreach ($totems as $totem) {
-                    echo "<li class='list-group-item'>".$totem['totem_localisation']." ".$totem['totem_code']." <a href='https://umap.openstreetmap.fr/en/map/balades-massy_312751#18/".$totem['totem_longitude']."/".$totem['totem_latitude']."' target='_blank'>localiser</a> <a href='./admin.php?action=supprimer_totem&id=".$totem['totem_id']."'>supprimer</a></li>";
+                    echo "<li class='list-group-item'>".$totem->totem_localisation." ".$totem->totem_code." <a href='https://umap.openstreetmap.fr/en/map/balades-massy_312751#18/".$totem->totem_longitude."/".$totem->totem_latitude."' target='_blank'>localiser</a> <a href='./admin.php?action=supprimer_totem&id=".$totem->totem_id."'>supprimer</a></li>";
                 } ?>
                 </ul>
             </p>
