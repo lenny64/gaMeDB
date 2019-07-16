@@ -3,10 +3,9 @@ $.get("./session.php?getSession", function(data) {
     var json_data_joueur = $.parseJSON(data);
     var joueur_id = json_data_joueur["joueur_id"];
     if (joueur_id && joueur_id != null) {
-        $.get("./get_historique_score_joueur.php?joueur_id="+joueur_id, function(data) {
-            var json_data_scores = $.parseJSON(data);
-            var dt = json_data_scores['dt'];
-            var points = json_data_scores['points'];
+        $.get("./get_historique_score_joueur.php?joueur_id="+joueur_id, function(d) {
+            var dt = d['dt'];
+            var points = d['points'];
 
             var trace1 = {
               x: dt,
@@ -36,3 +35,16 @@ $.get("./session.php?getSession", function(data) {
         });
     }
 });
+
+// if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(function(position){
+//     var lat = position.coords.latitude;
+//     var lon = position.coords.longitude;
+//     console.log(lat);
+//     console.log(lon);
+// },function(error){
+//     //use error.code to determine what went wrong
+// });
+// } else {
+//     console.log("je ne peux pas");
+// }

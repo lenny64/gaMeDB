@@ -1,29 +1,25 @@
 <?php
-
 require_once("./include/common.php");
-require_once("./include/functions.php");
+
+header('Content-Type: application/json; charset=utf-8');
 
 function getAssociations($association_id=false)
 {
     global $db;
     $associations = Array();
 
-    if (isset($_GET['id']) && $_GET['id'] !== NULL)
-    {
-        $association_id = $_GET['id'];
+    if ($association_id !== false && $association_id !== NULL) {
         $liste_associations = mysqli_query($db, "SELECT * FROM associations WHERE association_id = $association_id");
     }
-    else
-    {
+    else {
         $liste_associations = mysqli_query($db, "SELECT * FROM associations");
     }
 
-    while ($association = mysqli_fetch_array($liste_associations))
-    {
+    while ($association = mysqli_fetch_array($liste_associations)) {
         $associations[] = $association;
     }
 
-    echo json_encode($associations);
+    echo json_encode($associations,JSON_PRETTY_PRINT);
     return $associations;
 }
 

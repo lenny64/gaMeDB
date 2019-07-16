@@ -1,7 +1,8 @@
 <?php
-
 require_once("./include/common.php");
-require_once("./include/functions.php");
+
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
 
 $totems = Array();
 
@@ -21,8 +22,20 @@ function getTotems($id=null) {
     {
         $totems[$totem['totem_id']] = $totem;
     }
-
-    echo json_encode($totems);
+    if (isset($_GET['format']) && $_GET['format'] == 'geojson') {
+        $a = Array();
+        $a['type'] = 'FeatureCollection';
+        foreach ($totems as $totem) {
+            $feature['type'] = 'Feature';
+            $feature['geometry'] = Array('type' => 'Point', 'coordinates' => Array($totem['totem_longitude']+0, $totem['totem_latitude']+0));
+            $feature['properties'] = Array('adresse' => $totem['totem_localisation']);
+            $a['features'][] = $feature;
+        }
+        echo json_encode($a);
+    }
+    else {
+        echo json_encode($totems,JSON_PRETTY_PRINT);
+    }
     return $totems;
 }
 

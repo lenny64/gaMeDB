@@ -1,25 +1,6 @@
 <?php
 include('./include/front_header.php');
 
-function postScoreAssociation($association_id)
-{
-    global $db;
-    global $config;
-    $url_score = $config['URL_BASE']."get_score_association.php?association_id=".$association_id;
-    $score = json_decode(file_get_contents($url_score));
-    mysqli_query($db, "INSERT INTO points_association (`points_association_association_id`, `points_association_points`) VALUES($association_id, $score);");
-}
-
-
-function postScoreJoueur($joueur_id)
-{
-    global $db;
-    global $config;
-    $url_score = $config['URL_BASE']."get_score_joueur.php?joueur_id=".$joueur_id;
-    $score = json_decode(file_get_contents($url_score));
-    mysqli_query($db, "INSERT INTO points_joueur (`points_joueur_joueur_id`, `points_joueur_points`) VALUES($joueur_id, $score);");
-}
-
 $creationok = false;
 
 if (isset($_POST['totem_code']) && isset($_POST['joueur_id']) && isset($_POST['association_id']))
@@ -35,15 +16,19 @@ if (isset($_POST['totem_code']) && isset($_POST['joueur_id']) && isset($_POST['a
         $association_id = mysqli_real_escape_string($db, $_POST['association_id']);
         if (empty($totem_id))
         {
-            echo json_encode("Erreur de valeurs");
+            echo json_encode(Array("Erreur" => "Le totem n'existe pas"));
         }
         else {
             $creationok = true;
         }
     }
+    else {
+        echo json_encode(Array("Erreur" => "Erreur de valeurs : totem_code ou joueur_id ou association_id sont fausses"));
+    }
 }
 else {
     $creationok = false;
+    echo json_encode(Array("Erreur" => "Erreur de valeurs : totem_code ou joueur_id ou association_id n'ont pas été indiquées"));
 }
 
 if ($creationok === true)
@@ -67,8 +52,13 @@ if ($creationok === true)
                 WHERE s.scan_totem_id = t.totem_id AND s.scan_joueur_id = "'.$joueur_id.'" ORDER BY s.scan_datetime DESC LIMIT 2';
     $db_last_scans = mysqli_query($db, $query_last_scans);
     $last_scans = mysqli_fetch_all($db_last_scans, MYSQLI_ASSOC);
-    // Je récupère la distance
-    $distance = distance($last_scans[0]['totem_latitude'], $last_scans[0]['totem_longitude'], $last_scans[1]['totem_latitude'], $last_scans[1]['totem_longitude'], 'K');
+    // Je récupère la distance s'il y a déjà eu un scan
+    if (isset($last_scans[1])) {
+        $distance = distance($last_scans[0]['totem_latitude'], $last_scans[0]['totem_longitude'], $last_scans[1]['totem_latitude'], $last_scans[1]['totem_longitude'], 'K');
+    }
+    else {
+        $distance = 0;
+    }
     // J'initialise score
     $score = 0;
     // Si la distance est de 0 on gagne 5 points
@@ -102,7 +92,6 @@ if ($creationok === true)
     $points_gagnes = (round($score)%5 === 0) ? round($score) : round(($score+5/2)/5)*5;
     $score_joueur += $points_gagnes;
     $score_association += $points_gagnes;
-    echo $score_joueur;
     $db_insert_score_joueur = mysqli_query($db, 'INSERT INTO points_joueur (points_joueur_joueur_id,
                                                                             points_joueur_points)
                                                 VALUES ("'.$joueur_id.'",
@@ -112,7 +101,7 @@ if ($creationok === true)
                                                 VALUES ("'.$association_id.'",
                                                         "'.$score_association.'");');
 
-    echo json_encode("Succes !!");
+    echo "Bravo ! Vous avez gagné ".$points_gagnes." points !";
 }
 
 
