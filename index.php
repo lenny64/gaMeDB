@@ -10,6 +10,12 @@ if (isset($Session->connected) && $Session->connected == true) {
 
 ?>
 
+<div class="row">
+    <div class="w-100">
+        <iframe width="100%" height="300px" frameborder="0" allowfullscreen src="https://umap.openstreetmap.fr/en/map/gamedb_352489?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=false&allowEdit=false&moreControl=false&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=false&onLoadPanel=undefined&captionBar=false"></iframe>
+
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-6">
@@ -43,7 +49,7 @@ else {
 ?>
 
 <div class="row">
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
         <div class="card mb-6 box-shadow my-2">
             <div class="card-body">
                 <h4 class="card-title mb-4">Inscription</h4>
@@ -58,6 +64,12 @@ else {
                 <p class="card-text">Connectez-vous</p>
             </div>
         </div>
+    </div> -->
+    <div class="col-md-6">
+        <a class="btn btn-secondary btn-lg btn-block" role="button" href="/inscription.php">S'inscrire</a>
+    </div>
+    <div class="col-md-6">
+        <a class="btn btn-outline-secondary btn-lg btn-block" role="button" href="./connexion.php">Se connecter</a>
     </div>
 </div>
 

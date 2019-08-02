@@ -28,7 +28,8 @@ function getTotems($id=null) {
         foreach ($totems as $totem) {
             $feature['type'] = 'Feature';
             $feature['geometry'] = Array('type' => 'Point', 'coordinates' => Array($totem['totem_longitude']+0, $totem['totem_latitude']+0));
-            $feature['properties'] = Array('adresse' => $totem['totem_localisation']);
+            // $feature['properties'] = Array('name' => $totem['totem_code'],'description' => $totem['totem_localisation']);
+            $feature['properties'] = Array('description' => $totem['totem_localisation']);
             $a['features'][] = $feature;
         }
         echo json_encode($a);

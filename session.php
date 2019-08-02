@@ -8,6 +8,10 @@ $Session->checkConnected();
 if (isset($_GET['deconnexion'])) {
     session_destroy();
     $Session->connected = false;
+    $Session->joueur_id = false;
+    $Session->pseudo = false;
+    $Session->mail = false;
+    $Session->role = false;
 }
 else if (isset($_GET['connexion'])) {
     if (isset($_POST['pseudo']) && isset($_POST['password'])) {
@@ -26,6 +30,7 @@ function getSession($format = false)
             $resultat['joueur_id'] = $Session->joueur_id;
             $resultat['pseudo'] = $Session->pseudo;
             $resultat['mail'] = $Session->mail;
+            $resultat['role'] = $Session->role;
             if (isset($format) && $format == 'json') {
                 echo json_encode($resultat);
             }

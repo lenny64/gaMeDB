@@ -51,6 +51,7 @@ class Session
                     $this->nom = $joueur['joueur_nom'];
                     $this->prenom = $joueur['joueur_prenom'];
                     $this->mail = $joueur['joueur_mail'];
+                    $this->role = $joueur['role'];
                     $_SESSION['connected'] = true;
                     $_SESSION['joueur_id'] = $this->joueur_id;
                 }
@@ -67,6 +68,7 @@ class Session
                 $this->nom = $joueur['joueur_nom'];
                 $this->prenom = $joueur['joueur_prenom'];
                 $this->mail = $joueur['joueur_mail'];
+                $this->role = $joueur['role'];
                 $_SESSION['connected'] = true;
                 $_SESSION['joueur_id'] = $this->joueur_id;
             }

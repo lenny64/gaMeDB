@@ -34,7 +34,7 @@ include('./session.php');
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4">
     <h5 class="my-0 mr-md-auto font-weight-normal"><a href="./index.php">gaMeDB</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="./admin.php">Administration</a>
+        <?php if (isset($Session->role) && $Session->role == "admin") echo '<a class="p-2 text-dark" href="./admin.php">Administration</a>'; ?>
         <?php if (!isset($Session->connected) || $Session->connected == false) echo '<a class="p-2 text-dark" href="./inscription.php">Inscription</a>'; ?>
     </nav>
     <?php if (isset($Session->connected) && $Session->connected == true) { ?>
