@@ -24,7 +24,7 @@ include('./session.php');
     <script src="./include/plotly-latest.min.js"></script>
 
     <!-- Bootstrap core CSS -->
-    <link href="./bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
 </head>

@@ -1,5 +1,6 @@
 {
     "require": {
-        "khanamiryan/qrcode-detector-decoder": "^1.0"
+        "khanamiryan/qrcode-detector-decoder": "^1.0",
+        "twbs/bootstrap": "4.0.0"
     }
 }
