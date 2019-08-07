@@ -18,7 +18,7 @@ function getTotems($id=null) {
         $liste_totems = mysqli_query($db, "SELECT * FROM totems");
     }
 
-    while ($totem = mysqli_fetch_array($liste_totems))
+    while ($totem = mysqli_fetch_assoc($liste_totems))
     {
         $totems[$totem['totem_id']] = $totem;
     }

@@ -19,31 +19,64 @@ include('./session.php');
 
     <title>gaMeDB</title>
 
-    <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/product/"> -->
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer-navbar/">
 
     <script src="./include/plotly-latest.min.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="./bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./include/fontawesome-5.10.1/css/all.css" rel="stylesheet">
 
 
 </head>
 
 <body>
+    <!-- <header>
+          <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Fixed navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+              </ul>
+              <form class="form-inline mt-2 mt-md-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </div>
+          </nav>
+        </header> -->
 
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4">
-    <h5 class="my-0 mr-md-auto font-weight-normal"><a href="./index.php">gaMeDB</a></h5>
-    <nav class="my-2 my-md-0 mr-md-3">
-        <?php if (isset($Session->role) && $Session->role == "admin") echo '<a class="p-2 text-dark" href="./admin.php">Administration</a>'; ?>
-        <?php if (!isset($Session->connected) || $Session->connected == false) echo '<a class="p-2 text-dark" href="./inscription.php">Inscription</a>'; ?>
+<header>
+    <nav class="navbar navbar-expand-md">
+        <a class="navbar-brand" href="./index.php">gaMeDB</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon">...</span>
+        </button>
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <?php if (isset($Session->role) && $Session->role == "admin") echo '<li class="nav-item"><a class="nav-link" href="./admin.php">Administration</a></li>'; ?>
+                <?php if (!isset($Session->connected) || $Session->connected == false) echo '<li class="nav-item"><a class="nav-link" href="./inscription.php">Inscription</a></li>'; ?>
+                <?php if (isset($Session->connected) && $Session->connected == true) { ?>
+                    <li class="nav-item"><a class="nav-link" href="./index.php?deconnexion">Déconnexion</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-primary" href="#"><?php echo $Session->pseudo;?></a></li>
+                <?php } else { ?>
+                    <li class="nav-item"><a class="btn btn-outline-primary" href="./connexion.php">Se connecter</a></li>
+                <?php } ?>
+            </ul>
+        </div>
     </nav>
-    <?php if (isset($Session->connected) && $Session->connected == true) { ?>
-        <a class="p-2 text-dark" href="./index.php?deconnexion">Déconnexion</a>
-        <a class="btn btn-outline-primary" href="#"><?php echo $Session->pseudo;?></a>
-    <?php } else { ?>
-        <a class="btn btn-outline-primary" href="./connexion.php">Se connecter</a>
-    <?php } ?>
-</div>
+</header>
 
-<div class="album py-5 bg-light">
+<div class="album py-3 bg-light">
 <div class="container">

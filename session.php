@@ -28,6 +28,7 @@ function getSession($format = false)
         if (isset($Session->joueur_id)) {
             $resultat = Array();
             $resultat['joueur_id'] = $Session->joueur_id;
+            $resultat['association_id'] = $Session->association_id;
             $resultat['pseudo'] = $Session->pseudo;
             $resultat['mail'] = $Session->mail;
             $resultat['role'] = $Session->role;

@@ -1,5 +1,9 @@
 <?php
-include('./include/front_header.php');
+include('./include/common.php');
+include('./include/functions.php');
+include('./session.php');
+
+header('Content-Type: application/json; charset=utf-8');
 
 $creationok = false;
 
@@ -100,8 +104,8 @@ if ($creationok === true)
                                                                             points_association_points)
                                                 VALUES ("'.$association_id.'",
                                                         "'.$score_association.'");');
+    echo json_encode("Bravo ! Vous avez gagné ".$points_gagnes." points !", JSON_PRETTY_PRINT);
 
-    echo "Bravo ! Vous avez gagné ".$points_gagnes." points !";
 }
 
 
