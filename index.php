@@ -78,7 +78,7 @@ else {
 
 <div class="row">
     <div class="col-md-6">
-        <a class="btn btn-secondary btn-lg btn-block" role="button" href="/inscription.php">S'inscrire</a>
+        <a class="btn btn-secondary btn-lg btn-block" role="button" href="./inscription.php">S'inscrire</a>
     </div>
     <div class="col-md-6">
         <a class="btn btn-outline-secondary btn-lg btn-block" role="button" href="./connexion.php">Se connecter</a>
