@@ -7,6 +7,8 @@ if (isset($Session->connected) && $Session->connected == true) {
     $score_joueur = json_decode(file_get_contents($url_joueur));
     $url_association = $config['URL_BASE']."get_score_association.php?association_id=".$Session->association_id;
     $score_association = json_decode(file_get_contents($url_association));
+    $bdd_niveau = mysqli_query($db, "SELECT niveau_score FROM niveaux WHERE niveau_score > $score_joueur ORDER BY niveau_score ASC LIMIT 1");
+    $niveau = mysqli_fetch_assoc($bdd_niveau)['niveau_score'];
 
 ?>
 
@@ -43,17 +45,22 @@ if (isset($Session->connected) && $Session->connected == true) {
         <p id="modalText"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.reload();">Close</button>
       </div>
     </div>
   </div>
 </div>
 
 <div class="col-md-12 mb-4">
-    <form class="form" method="post" action="./create_scan.php">
+    <form class="form">
         <input type="file" accept="image/*" capture="environment" onchange="openQRCamera(this);" tabindex=-1 class="form-control" id="input-image"/>
         <label for="input-image" id="label-input-image" class="btn btn-primary my-2 col-md-12 btn-lg"><i class="fas fa-qrcode"></i> Flasher un totem</label>
     </form>
+</div>
+<div class="col-md-12 mb-4">
+    <div class="progress" style="height: 35px;">
+      <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: <?php echo $score_joueur/$niveau*100; ?>%;" aria-valuenow="<?php echo $score_joueur; ?>" aria-valuemin="0" aria-valuemax="1000"><?php echo $score_joueur;?></div>
+    </div>
 </div>
 <div class="row">
     <div class="w-100">
