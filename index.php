@@ -52,7 +52,7 @@ if (isset($Session->connected) && $Session->connected == true) {
 <div class="col-md-12 mb-4">
     <form class="form" method="post" action="./create_scan.php">
         <input type="file" accept="image/*" capture="environment" onchange="openQRCamera(this);" tabindex=-1 class="form-control" id="input-image"/>
-        <label for="input-image" id="label-input-image" class="btn btn-outline-primary my-2 col-md-12 btn-lg"><i class="fas fa-qrcode"></i> Flasher un totem</label>
+        <label for="input-image" id="label-input-image" class="btn btn-primary my-2 col-md-12 btn-lg"><i class="fas fa-qrcode"></i> Flasher un totem</label>
     </form>
 </div>
 <div class="row">

@@ -7,6 +7,10 @@ $Session->checkConnected();
 
 if (isset($_GET['deconnexion'])) {
     session_destroy();
+    unset($_COOKIE['userId']);
+    setcookie('userId', null, -3600);
+    unset($_COOKIE['token']);
+    setcookie('token', null, -3600);
     $Session->connected = false;
     $Session->joueur_id = false;
     $Session->pseudo = false;
@@ -16,7 +20,8 @@ if (isset($_GET['deconnexion'])) {
 else if (isset($_GET['connexion'])) {
     if (isset($_POST['pseudo']) && isset($_POST['password'])) {
         if ($_POST['pseudo'] != NULL && $_POST['password'] != NULL) {
-            $Session->connecter(Array('pseudo' => $_POST['pseudo'], 'password' => $_POST['password']));
+            $rememberMe = isset($_POST['rememberMe']) ? true : false;
+            $Session->connecter(Array('pseudo' => $_POST['pseudo'], 'password' => $_POST['password'], 'rememberMe' => $rememberMe));
         }
     }
 }

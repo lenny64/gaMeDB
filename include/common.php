@@ -21,9 +21,17 @@ if(!$db = mysqli_connect($config['MYSQL_HOST'],
 }
 
 mysqli_query($db, "SET sql_mode = ''");
-$config_query = mysqli_query($db,"SELECT * FROM associations");
-while($config_result = mysqli_fetch_array($config_query)) {
-  //print_r($config_result);
+$config_query = mysqli_query($db,"SELECT * FROM config");
+while($config_result = mysqli_fetch_assoc($config_query)) {
+    switch ($config_result['config_variable']) {
+        case 'titre':
+            $config['TITRE'] = $config_result['config_valeur'];
+            break;
+        case 'titre_menu':
+            $config['TITRE_MENU'] = $config_result['config_valeur'];
+            break;
+
+    }
 }
 
 class Session
@@ -54,6 +62,10 @@ class Session
                     $this->role = $joueur['role'];
                     $_SESSION['connected'] = true;
                     $_SESSION['joueur_id'] = $this->joueur_id;
+                    $token = $this->storeTokenInDatabase();
+                    if (isset($infos['rememberMe']) && $infos['rememberMe'] == TRUE) {
+                        $this->createCookie($token);
+                    }
                 }
             }
         }
@@ -88,5 +100,57 @@ class Session
                 }
             }
         }
+        else if (isset($_COOKIE['token']) && $_COOKIE['token'] != NULL) {
+            $this->checkCookie();
+        }
+    }
+    function checkToken()
+    {
+        if (isset($this->joueur_id) && $this->joueur_id != NULL) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $query = mysqli_query($this->db, "SELECT connection_token FROM connections WHERE connection_user_id = $this->joueur_id ORDER BY connection_timestamp DESC LIMIT 1;");
+            $result = mysqli_fetch_assoc($query);
+            if (!$result) {
+                return false;
+            }
+            return $result['connection_token'];
+        }
+    }
+    function storeTokenInDatabase()
+    {
+        if (isset($this->joueur_id) && $this->joueur_id != NULL) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $token = hash('sha256', md5(uniqid($this->pseudo.':'.$ip,true)));
+            $sql = "INSERT INTO connections (`connection_ip` , `connection_user_id`, `connection_token`) VALUES('$ip', '$this->joueur_id', '$token'); ";
+            $store = mysqli_query($this->db, $sql);
+            if (!$store) {
+                return false;
+            }
+            return $token;
+        }
+    }
+    function checkCookie()
+    {
+        if (isset($_COOKIE['token']) && $_COOKIE['token'] != NULL) {
+            $cookie = $_COOKIE['token'];
+            list ($user, $token, $mac) = explode(':',$cookie);
+            $this->joueur_id = $user;
+            $tokenbdd = $this->checkToken();
+            if ($tokenbdd) {
+                if (hash_equals($token, $tokenbdd)) {
+                    $this->connecter(Array('joueur_id' => $this->joueur_id));
+                }
+            }
+        }
+    }
+    function createCookie($token)
+    {
+        $cookie = $this->joueur_id.':'.$token;
+        $mac = hash('sha256',$cookie);
+        $cookie .= ':' . $mac;
+        setcookie('token', $cookie);
+        // $ip = $_SERVER['REMOTE_ADDR'];
+        // setcookie('userId', $this->joueur_id);
+        // setcookie('token', hash('sha256', md5(uniqid($this->pseudo.':'.$ip,true))));
     }
 }

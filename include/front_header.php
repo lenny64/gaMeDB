@@ -5,6 +5,9 @@ include('./include/functions.php');
 
 include('./session.php');
 
+$ip = $_SERVER['REMOTE_ADDR'];
+$uri = $_SERVER['REQUEST_URI'];
+mysqli_query($db, "INSERT INTO log (`log_ip`, `log_page`) VALUES ('$ip', '$uri');");
 
 ?>
 
@@ -17,7 +20,7 @@ include('./session.php');
     <meta name="author" content="">
     <link rel="icon" href="">
 
-    <title>gaMeDB</title>
+    <title><?php echo $config['TITRE']; ?></title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer-navbar/">
 
@@ -34,7 +37,7 @@ include('./session.php');
 
 <header>
     <nav class="navbar navbar-expand-md">
-        <a class="navbar-brand" href="./index.php">gaMeDB</a>
+        <a class="navbar-brand" href="./index.php"><?php echo $config['TITRE_MENU']; ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon">...</span>
         </button>
@@ -53,5 +56,5 @@ include('./session.php');
     </nav>
 </header>
 
-<div class="album py-3 bg-light">
+<div class="album py-3">
 <div class="container">
